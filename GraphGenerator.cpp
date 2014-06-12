@@ -19,6 +19,7 @@ void GraphGenerator::createGraph()
 {
 	createNodes();
 	setRandomNeighbors();
+	setRandomDominators();
 	printGraph();
 }
 
@@ -48,6 +49,20 @@ void GraphGenerator::setRandomNeighbors()
 			if ( neighbourIndex >= GraphGenerator::NODECOUNT ) neighbourIndex -= GraphGenerator::NODECOUNT;
 			Node* n = &nodeList.at(neighbourIndex);
 			iter->setNeighbor(n);
+		}
+	}
+}
+
+void GraphGenerator::setRandomDominators()
+{
+	// generates random dominators by chance
+	for (iter = nodeList.begin(); iter != nodeList.end(); ++iter)
+	{
+		short randNum = rand() % 100;
+		if ( randNum < GraphGenerator::DOMINATOR_CHANCE )
+		{
+			short randNeighborIndex = rand() % GraphGenerator::NEIGHCOUNT;
+			iter->setDominator( &nodeList.at(randNeighborIndex) );
 		}
 	}
 }

@@ -6,6 +6,7 @@
 
 #define OUT 0
 #define IN 1
+#define WAIT 2
 
 class Stabilizer
 {

@@ -19,12 +19,14 @@ public:
 	void createGraph();
 	void createNodes();
 	void setRandomNeighbors();
+	void setRandomDominators();
 	void appendToNodeList(Node);
 	void printGraph();
 
-	static const int NODECOUNT = 50; // [25, 50, 75, 100]
-	static const int NEIGHCOUNT = 8; // [4, 8, 12, 16]
-	static const int FAULT_PERCENTAGE = 5; // [5, 10, 15, 20]
+	static const short NODECOUNT = 25; // [25, 50, 75, 100]
+	static const short NEIGHCOUNT = 4; // [4, 8, 12, 16]
+	static const short FAULT_PERCENTAGE = 5; // [5, 10, 15, 20]
+	static const short DOMINATOR_CHANCE = 30; // percent chance to have a dominator (only necessary for minimal dominating set alg.)
 };
 
 
