@@ -40,32 +40,45 @@ void Stabilizer::incrementStepCount()
 
 void Stabilizer::checkForFailure()
 {
-	short rate = rand() % 100;
-	if ( rate < 50 )
+	// minimum average step count is 9 (except Dominating Set alg.)
+	// so in step count 3, 6 and 9, algorithm will fail some nodes based on fault percentage
+	short nodeCountToFail = 1 + ( (GraphGenerator::NODECOUNT - 1) * GraphGenerator::FAULT_PERCENTAGE / 100);
+	short failPerRound = 0;
+
+	if ( nodeCountToFail < 3 )
 	{
-		short randomNodeIndex = rand() % nodeList->size();
-		Node* n = &nodeList->at(randomNodeIndex);
-		vector<Node*>::iterator iter;
-		for ( iter = n->getNeighborsAddress()->begin(); iter != n->getNeighborsAddress()->end(); ++iter )
+		if ( stepCount == 3 ) failPerRound = nodeCountToFail;
+	}
+	else
+	{
+		if ( stepCount == 3 || stepCount == 6 || stepCount == 9)
 		{
-			vector<Node*>::iterator nIter;
-			for ( nIter = (*iter)->getNeighborsAddress()->begin(); nIter != (*iter)->getNeighborsAddress()->end(); ++nIter )
-			{
-				if ( (*nIter)->getId() == n->getId() )
-				{
-					(*iter)->getNeighborsAddress()->erase( nIter );
-					--nIter;
-				}
-			}
+			// e.g. if 5 nodes to fail, first two rounds only 1 node fails, 3. round rest of the nodes (3) fail.
+			failPerRound = nodeCountToFail / 3;
+			if ( stepCount == 9 ) failPerRound = nodeCountToFail - ( 2 * failPerRound );
 		}
+	}
+
+	if ( failPerRound != 0 )
+	{
+		for ( int i = 0; i < failPerRound; i++)
+		{
+			// remove a random node which is not deleted before
+			short randomNodeIndex = rand() % nodeList->size();
+			Node* n = &nodeList->at(randomNodeIndex);
+			if ( n->getIsDeleted() ) --i;
+			else n->setIsDeleted(true);
+		}
+		cout << failPerRound << " random nodes failed" << endl;
 	}
 }
 
 short Stabilizer::getSize()
 {
+	size = 0;
 	for (iter = nodeList->begin(); iter != nodeList->end(); ++iter)
 	{
-		if ( iter->getState() == 1 ) ++size;
+		if ( iter->getState() == IN && iter->getIsDeleted() == false ) ++size;
 	}
 
 	return size;
@@ -73,10 +86,10 @@ short Stabilizer::getSize()
 
 void Stabilizer::generateDominatingSet()
 {
+	// main function to create a dominating set
 	cout << "Dominating Set Stabilization Algorithm Is Starting" << endl;
 	while ( !isStabilized )
 	{
-		//checkForFailure();
 		applyRules();
 	}
 	cout << "Dominating Set Stabilization Algorithm Ended In " << getStepCount() << " Steps And " << getSize() << " Nodes" << endl;

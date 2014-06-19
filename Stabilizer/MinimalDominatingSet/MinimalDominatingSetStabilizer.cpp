@@ -21,13 +21,13 @@ void MinimalDominatingSetStabilizer::applyMembershipRule1()
 	bool candidate;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == 0 )
+		if ( iter->getState() == 0 && iter->getIsDeleted() == false )
 		{
 			candidate = true;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() != 0 ) candidate = false;
+				if ( (*nIter)->getState() != 0 && (*nIter)->getIsDeleted() == false ) candidate = false;
 			}
 
 			if ( candidate )
@@ -49,16 +49,19 @@ void MinimalDominatingSetStabilizer::applyMembershipRule2()
 	bool neighboursInMds;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == 1 )
+		if ( iter->getState() == 1 && iter->getIsDeleted() == false )
 		{
 			isDominator = false;
 			neighboursInMds = false;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == 1 ) neighboursInMds = true;
-				if ( (*nIter)->getDominator() != NULL && (*nIter)->getDominator()->getId() == iter->getId() )
-					isDominator = true;
+				if ( (*nIter)->getIsDeleted() == false )
+				{
+					if ( (*nIter)->getState() == 1 ) neighboursInMds = true;
+					if ( (*nIter)->getDominator() != NULL && (*nIter)->getDominator()->getId() == iter->getId() )
+						isDominator = true;
+				}
 			}
 
 			if ( neighboursInMds && !isDominator )
@@ -77,7 +80,7 @@ void MinimalDominatingSetStabilizer::applyPointerRule1()
 	// if node i is in MDS and also its pointer is not NULL, then it sets its pointer to NULL
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == 1 && iter->getDominator() != NULL )
+		if ( iter->getState() == 1 && iter->getDominator() != NULL && iter->getIsDeleted() == false )
 		{
 			iter->setDominator( NULL );
 			cout << "Node" << iter->getId() << " is in MDS, so clearing its dominator [Pointer Rule 1]" << endl;
@@ -94,14 +97,14 @@ void MinimalDominatingSetStabilizer::applyPointerRule2()
 	short neighbourCountInMds;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == 0 )
+		if ( iter->getState() == 0 && iter->getIsDeleted() == false )
 		{
 			neighbourCountInMds = 0;
 			Node* neighbour;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == 1 )
+				if ( (*nIter)->getState() == 1 && (*nIter)->getIsDeleted() == false )
 				{
 					neighbourCountInMds++;
 					neighbour = *nIter;
@@ -126,13 +129,13 @@ void MinimalDominatingSetStabilizer::applyPointerRule3()
 	short neighbourCountInMds;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == 0 )
+		if ( iter->getState() == 0 && iter->getIsDeleted() == false )
 		{
 			neighbourCountInMds = 0;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == 1 )
+				if ( (*nIter)->getState() == 1 && (*nIter)->getIsDeleted() == false )
 					neighbourCountInMds++;
 			}
 			if ( neighbourCountInMds > 1 && iter->getDominator() != NULL )

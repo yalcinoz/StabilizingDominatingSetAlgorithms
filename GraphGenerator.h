@@ -23,9 +23,9 @@ public:
 	void appendToNodeList(Node);
 	void printGraph();
 
-	static const short NODECOUNT = 25; // [25, 50, 75, 100]
-	static const short NEIGHCOUNT = 4; // [4, 8, 12, 16]
-	static const short FAULT_PERCENTAGE = 5; // [5, 10, 15, 20]
+	static const short NODECOUNT = 50; // [25, 50, 75, 100]
+	static const short NEIGHCOUNT = 16; // [4, 8, 12, 16]
+	static const short FAULT_PERCENTAGE = 10; // [5, 10, 15, 20]
 	static const short DOMINATOR_CHANCE = 30; // percent chance to have a dominator (only necessary for minimal dominating set alg.)
 };
 

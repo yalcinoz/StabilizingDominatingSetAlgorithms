@@ -76,8 +76,11 @@ void GraphGenerator::printGraph()
 {
 	for (iter = nodeList.begin(); iter != nodeList.end(); ++iter)
 	{
-		cout << "ID: " << iter->getId() << "| State: " << iter->getState() << " | ";
-		iter->printNeighbors();
+		if ( iter->getIsDeleted() == false )
+		{
+			cout << "ID: " << iter->getId() << "| State: " << iter->getState() << " | ";
+			iter->printNeighbors();
+		}
 	}
 }
 

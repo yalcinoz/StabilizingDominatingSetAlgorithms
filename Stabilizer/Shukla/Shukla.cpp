@@ -12,26 +12,29 @@ void Shukla::applyRules()
 	short neighboursInMds;
 	for ( iter=nodeList->begin(); iter!=nodeList->end(); ++iter )
 	{
-		neighboursInMds = 0;
-		vector<Node*>::iterator nIter;
-		for (nIter=iter->getNeighborsAddress()->begin(); nIter!=iter->getNeighborsAddress()->end(); ++nIter)
+		if ( iter->getIsDeleted() == false )
 		{
-			if ( (*nIter)->getState() == 1 ) neighboursInMds++;
-		}
+			neighboursInMds = 0;
+			vector<Node*>::iterator nIter;
+			for (nIter=iter->getNeighborsAddress()->begin(); nIter!=iter->getNeighborsAddress()->end(); ++nIter)
+			{
+				if ( (*nIter)->getState() == 1 && (*nIter)->getIsDeleted() == false ) neighboursInMds++;
+			}
 
-		if ( iter->getState() == 0 && neighboursInMds == 0 )
-		{
-			cout << "Node" << iter->getId() << " gets into DS [Shukla Rule1]" << endl;
-			iter->setState(1);
-			incrementStepCount();
-			ruleApplied = true;
-		}
-		else if ( iter->getState() == 1 && neighboursInMds > 0 )
-		{
-			cout << "Node" << iter->getId() << " gets out of DS [Shukla Rule 2]" << endl;
-			iter->setState(0);
-			incrementStepCount();
-			ruleApplied = true;
+			if ( iter->getState() == 0 && neighboursInMds == 0 )
+			{
+				cout << "Node" << iter->getId() << " gets into DS [Shukla Rule1]" << endl;
+				iter->setState(1);
+				incrementStepCount();
+				ruleApplied = true;
+			}
+			else if ( iter->getState() == 1 && neighboursInMds > 0 )
+			{
+				cout << "Node" << iter->getId() << " gets out of DS [Shukla Rule 2]" << endl;
+				iter->setState(0);
+				incrementStepCount();
+				ruleApplied = true;
+			}
 		}
 	}
 

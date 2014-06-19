@@ -10,6 +10,7 @@ class Node
 private:
 	short id;
 	short state;
+	bool isDeleted; // true if node is removed from the graph
 	Node* dominator;
 	vector<Node*> neighbors;
 	vector<Node*>::iterator iter;
@@ -20,6 +21,8 @@ public:
 	short getId();
 	void setState(short);
 	short getState();
+	void setIsDeleted(bool);
+	bool getIsDeleted();
 	void setDominator(Node*);
 	Node* getDominator();
 	void setNeighbor(Node*);

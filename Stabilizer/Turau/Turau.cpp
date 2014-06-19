@@ -20,13 +20,13 @@ void Turau::applyRule1()
 	short neighboursInDs;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == OUT )
+		if ( iter->getState() == OUT && iter->getIsDeleted() == false )
 		{
 			neighboursInDs = 0;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == IN ) neighboursInDs++;
+				if ( (*nIter)->getState() == IN && (*nIter)->getIsDeleted() == false ) neighboursInDs++;
 			}
 
 			if ( neighboursInDs == 0 )
@@ -46,13 +46,13 @@ void Turau::applyRule2()
 	short neighboursInDs;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == WAIT )
+		if ( iter->getState() == WAIT && iter->getIsDeleted() == false )
 		{
 			neighboursInDs = 0;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == IN ) neighboursInDs++;
+				if ( (*nIter)->getState() == IN && (*nIter)->getIsDeleted() == false ) neighboursInDs++;
 			}
 
 			if ( neighboursInDs > 0 )
@@ -74,16 +74,19 @@ void Turau::applyRule3()
 	short neighboursInWaitWithLowerId;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == WAIT )
+		if ( iter->getState() == WAIT && iter->getIsDeleted() == false )
 		{
 			neighboursInDs = 0;
 			neighboursInWaitWithLowerId = 0;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == IN ) neighboursInDs++;
-				if ( (*nIter)->getState() == WAIT && (*nIter)->getId() < iter->getId() )
-					neighboursInWaitWithLowerId++;
+				if ( (*nIter)->getIsDeleted() == false )
+				{
+					if ( (*nIter)->getState() == IN ) neighboursInDs++;
+					if ( (*nIter)->getState() == WAIT && (*nIter)->getId() < iter->getId() )
+						neighboursInWaitWithLowerId++;
+				}
 			}
 
 			if ( neighboursInDs == 0 && neighboursInWaitWithLowerId == 0 )
@@ -104,13 +107,13 @@ void Turau::applyRule4()
 	short neighboursInDs;
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		if ( iter->getState() == IN )
+		if ( iter->getState() == IN && iter->getIsDeleted() == false )
 		{
 			neighboursInDs = 0;
 			vector<Node*>::iterator nIter;
 			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
 			{
-				if ( (*nIter)->getState() == IN ) neighboursInDs++;
+				if ( (*nIter)->getState() == IN && (*nIter)->getIsDeleted() == false ) neighboursInDs++;
 			}
 
 			if ( neighboursInDs > 0 )

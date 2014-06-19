@@ -16,7 +16,7 @@ protected:
 	int stepCount;
 	short size;
 	bool isStabilized;
-	bool ruleApplied;
+	bool ruleApplied; // true if any rule is applied in one iteration
 
 public:
 	explicit Stabilizer(vector<Node>*);

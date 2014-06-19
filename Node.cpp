@@ -8,6 +8,7 @@ Node::Node()
 	id = NULL;
 	state = NULL;
 	dominator = NULL;
+	isDeleted = false;
 }
 
 void Node::setId(short _id)
@@ -28,6 +29,16 @@ void Node::setState(short s)
 short Node::getState()
 {
 	return state;
+}
+
+void Node::setIsDeleted(bool _isDeleted)
+{
+	isDeleted = _isDeleted;
+}
+
+bool Node::getIsDeleted()
+{
+	return isDeleted;
 }
 
 void Node::setDominator(Node* n)
@@ -60,7 +71,7 @@ void Node::printNeighbors()
 	cout << "Neighbors: ";
 	for (iter = neighbors.begin(); iter != neighbors.end(); ++iter)
 	{
-		cout << (*iter)->getId() << " ";
+		if ( (*iter)->getIsDeleted() == false ) cout << (*iter)->getId() << " ";
 	}
 	cout << endl;
 }

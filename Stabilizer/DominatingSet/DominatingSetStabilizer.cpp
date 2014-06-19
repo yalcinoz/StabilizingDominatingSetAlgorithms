@@ -10,20 +10,23 @@ void DominatingSetStabilizer::applyRules()
 	// if a node's state is equal to all of its neighbours' state, then node changes state
 	for ( iter = nodeList->begin(); iter != nodeList->end(); ++iter )
 	{
-		bool statesEqual = true;
-		vector<Node*>::iterator nIter;
-		for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
+		if ( iter->getIsDeleted() == false )
 		{
-			if ( (*nIter)->getState() != iter->getState() ) statesEqual = false;
-		}
+			bool statesEqual = true;
+			vector<Node*>::iterator nIter;
+			for ( nIter = iter->getNeighborsAddress()->begin(); nIter != iter->getNeighborsAddress()->end(); ++nIter )
+			{
+				if ( (*nIter)->getState() != iter->getState() && (*nIter)->getIsDeleted() == false ) statesEqual = false;
+			}
 
-		if ( statesEqual )
-		{
-			short newState = iter->getState() == IN ? OUT : IN;
-			cout << "Node" << iter->getId() << " transitioned state from " << iter->getState() << " to " << newState << endl;
-			iter->setState(newState);
-			incrementStepCount();
-			ruleApplied = true;
+			if ( statesEqual )
+			{
+				short newState = iter->getState() == IN ? OUT : IN;
+				cout << "Node" << iter->getId() << " transitioned state from " << iter->getState() << " to " << newState << endl;
+				iter->setState(newState);
+				incrementStepCount();
+				ruleApplied = true;
+			}
 		}
 	}
 
